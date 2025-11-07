@@ -1,0 +1,39 @@
+# syntax=docker/dockerfile:1.4
+
+FROM python:3.8-alpine
+RUN adduser -D microblog
+
+WORKDIR /home/microblog
+
+
+VOLUME ["/home/microblog/app"]
+VOLUME ["/home/microblog/tests"]
+
+COPY requirements/prod.txt ./prod.txt
+COPY requirements/test.txt ./test.txt
+COPY .pylintrc ./
+COPY pytest.ini ./
+
+COPY Makefile ./
+
+COPY boot_test.sh boot_test.sh
+
+
+
+RUN <<-EOF
+    apk add --no-cache make bash gcc musl-dev
+
+    python -m venv .venv
+    .venv/bin/pip3 install -r test.txt
+
+
+    chmod +x boot_test.sh
+    chown -R microblog:microblog ./
+EOF
+
+ENV FLASK_APP microblog.py
+
+USER microblog
+
+EXPOSE 5000
+ENTRYPOINT ["./boot_test.sh"]
