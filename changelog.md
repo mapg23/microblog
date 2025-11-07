@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 ## [11.0.0] - 2025-11-07
 
 - Added docker compose file to run the docker containers
-
+- Added Dockerfile to run tests inside a container
 <!-- ### Changed
 
 ### Removed
