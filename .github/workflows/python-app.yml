@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: ["master", "feature/docker_testing"]
+    branches: ["master"]
   pull_request:
-    branches: ["master", "feature/docker_testing"]
+    branches: ["master"]
 
 permissions:
   contents: read
