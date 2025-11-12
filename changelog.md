@@ -22,3 +22,9 @@ All notable changes to this project will be documented in this file.
 ### Removed
 
 ### Fixed -->
+
+## [11.0.1] - 2025-11-12
+
+- Added following / unfollowing other users
+- View followed users in 'Home' feed
+- Github Actions will publish app to Docker Hub on new release
