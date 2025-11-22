@@ -1,0 +1,48 @@
+---
+- name: Set correct apt sources for Debian Buster archive
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list
+    content: |
+      deb http://archive.debian.org/debian buster main contrib non-free
+      deb http://archive.debian.org/debian-security buster/updates main contrib non-free
+
+- name: Update apt cache (allow unauthenticated for archive)
+  ansible.builtin.apt:
+    update_cache: yes
+    allow_unauthenticated: yes
+
+- name: Install Docker on Debian/Ubuntu
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker is installed
+  ansible.builtin.package:
+    name: docker.io
+    state: present
+
+- name: Remove old MySQL container if it exists
+  community.docker.docker_container:
+    name: mysql-db
+    state: absent
+    force_kill: yes # ensures it’s stopped
+
+- name: Start a fresh MySQL container
+  community.docker.docker_container:
+    name: mysql-db
+    image: mysql:latest
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+- name: Debug database host
+  ansible.builtin.debug:
+    msg: "Running role on database host: {{ inventory_hostname }} (IP: {{ ansible_host | default('same as hostname') }})"
+
+- name: Debug custom variable
+  ansible.builtin.debug:
+    var: my_variable

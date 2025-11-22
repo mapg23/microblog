@@ -4,31 +4,20 @@
     name: root
     password: "{{ root_password }}"
 
-- name: Update apt sources to archive.debian.org
-  copy:
-    dest: /etc/apt/sources.list
-    content: |
-      deb http://archive.debian.org/debian buster main contrib non-free
-      deb http://archive.debian.org/debian-security buster/updates main contrib non-free
-
-- name: Disable valid-until check for archived repos
-  copy:
-    dest: /etc/apt/apt.conf.d/99ignore-release-date
-    content: |
-      Acquire::Check-Valid-Until "false";
-
 - name: Update apt-cache and upgrade packages
   apt:
     force_apt_get: yes
     update_cache: yes
-    cache_valid_time: 3600
     upgrade: dist
-    dpkg_options: "force-confdef,force-confold"
+    cache_valid_time: 3200
 
 - name: Install packages
   apt:
-    force_apt_get: yes
     name: "{{ packages }}"
+    state: present
+    force_apt_get: yes
+    update_cache: yes
+  ignore_errors: yes
 
 - name: Copy unattended upgrades 10 settings
   copy:
@@ -44,27 +33,37 @@
 
 - name: Create user
   user:
+    name: "{{ item.user }}"
+    password: "{{ server_user_pass }}"
+    state: present
+    shell: /bin/bash
+    groups: "{{ server_user_groups }}"
+  with_items: "{{ users_users }}"
+  when: item.user in users_regular_users
+
+- name: Set ssh keys for regular users from GitHub
+  authorized_key:
+    user: "{{ item.user }}"
+    key: "https://raw.githubusercontent.com/{{ item.github }}/{{ item.key }}"
+    exclusive: yes
+  # with_items: "{{ users_regular_users | selectattr('github', 'defined') }}"
+  with_items: "{{ users_users }}"
+  when: item.github is defined and item.user in users_regular_users
+
+- name: Create user
+  user:
     name: "{{ server_user }}"
     password: "{{ server_user_pass }}"
     state: present
     shell: /bin/bash
     groups: "{{ server_user_groups }}"
 
-- name: Set ssh keys for regular users from GitHub
+- name: Add ssh-key for new user
   authorized_key:
-    user: "{{ item.user }}"
-    key: "https://github.com/{{ item.github }}/{{ item.keys }}"
-    exclusive: yes
-  # with_items: "{{ users_regular_users | selectattr('github', 'defined') }}"
-  with_items: "{{ users_users }}"
-  when: item.github is defined and item.user in users_regular_users
-
-# - name: Add ssh-key for new user
-#   authorized_key:
-#     user: "{{ server_user }}"
-#     state: present
-#     key: "{{ lookup('file', item) }}"
-#   with_items: "{{ pub_ssh_key_location }}"
+    user: "{{ server_user }}"
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_items: "{{ pub_ssh_key_location }}"
 
 - name: Add user to sudoers
   lineinfile:

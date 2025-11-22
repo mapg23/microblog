@@ -23,7 +23,15 @@
 #   - user: ci
 #     name: "CI server"
 #     key: ci.pub
-users_users: []
+users_users:
+  - user: marcus
+    name: "Marcus P"
+    key: "microblog/refs/heads/master/azure_key_marcus.pub.keys"
+    github: mapg23
+  - user: hampus
+    name: "Hampus G"
+    key: "microblog/refs/heads/master/azure_key_hampus.pub.keys"
+    github: mapg23
 
 # Legacy users users to delete
 # users_delete_users:
@@ -64,10 +72,8 @@ users_admin_users: []
 # `github` is the user's GitHub id
 
 users_regular_users:
-  - user: marcus
-    name: "Marcus Pettersson"
-    key: "microblog/azure_key_marcus.pub.keys"
-    github: mapg23
+  - marcus
+  - hampus
 
 # Unix groups that regular users should have
 # users_regular_groups:

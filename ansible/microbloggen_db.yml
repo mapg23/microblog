@@ -1,0 +1,9 @@
+---
+- hosts: databases
+  connection: ssh
+  become: yes
+  become_method: sudo
+  collections:
+    - azure.azcollection
+  roles:
+    - microbloggen_db

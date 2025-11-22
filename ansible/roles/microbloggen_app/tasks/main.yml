@@ -1,0 +1,38 @@
+---
+- name: Set correct apt sources for Debian Buster archive
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list
+    content: |
+      deb http://archive.debian.org/debian buster main contrib non-free
+      deb http://archive.debian.org/debian-security buster/updates main contrib non-free
+
+- name: Update apt cache (allow unauthenticated for archive)
+  ansible.builtin.apt:
+    update_cache: yes
+    allow_unauthenticated: yes
+
+- name: Install Docker on Debian/Ubuntu
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Ensure Docker is installed
+  ansible.builtin.package:
+    name: docker.io
+    state: present
+
+  # Change to github action variable that outputs the latest docker tag
+- name: Start microblogg
+  community.docker.docker_container:
+    name: "microblogg"
+    image: "maacke16/microblog:v11.0.1-prod"
+    state: started
+    restart_policy: always
+    env:
+      SECRET_KEY: "my-secret-key"
+      DATABASE_URL: "mysql+pymysql://microblog:database-password@{{ hostvars[groups['databases'][0]].ansible_host }}/microblog"
+
+- name: Debug database host
+  ansible.builtin.debug:
+    msg: "Running role on database host: {{ inventory_hostname }} (IP: {{ ansible_host | default('same as hostname') }})"

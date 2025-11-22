@@ -1,2 +1,9 @@
 [local]
 localhost ansible_connection=local
+
+[appservers]
+appserver1.mapg23.me ansible_host=52.138.222.215 ansible_user=deploy
+appserver2.mapg23.me ansible_host=52.138.136.157 ansible_user=deploy
+
+[databases]
+db ansible_host=52.138.218.52 ansible_user=deploy
