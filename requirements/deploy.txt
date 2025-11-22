@@ -1,5 +1,6 @@
 # -r https://raw.githubusercontent.com/ansible-collections/azure/36d034034bbc9bb1e83007d2a643d4a1af2f8776/requirements.txt
 boto
 boto3
-ansible
+ansible>=10.0.0,<11.0.0
+setuptools
 PyMySQL
