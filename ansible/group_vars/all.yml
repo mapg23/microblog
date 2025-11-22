@@ -11,7 +11,11 @@ admin_email: mapg23@student.bth.se
 vmtags:
   StudentId: mapg23 # Change me
 
-pub_ssh_key_location: "/home/marcus/.ssh/azure_key.pub" # Change me, your local ssh key!
+# pub_ssh_key_location: "/home/marcus/.ssh/azure_key.pub" # Change me, your local ssh key!
+
+pub_ssh_key_location:
+  - "../../azure_key_marcus.pub.keys"
+  - "../../azure_key_hampus.pub.keys"
 
 server_user: "deploy"
 server_user_pass: "password" # change me
