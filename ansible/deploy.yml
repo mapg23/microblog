@@ -1,5 +1,5 @@
 - name: Test deployment
-  hosts: all
+  hosts: local
   become: yes
 
   tasks:
