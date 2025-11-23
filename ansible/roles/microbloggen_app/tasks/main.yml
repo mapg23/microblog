@@ -31,7 +31,9 @@
     restart_policy: always
     env:
       SECRET_KEY: "my-secret-key"
-      DATABASE_URL: "mysql+pymysql://microblog:database-password@{{ hostvars[groups['databases'][0]].ansible_host }}/microblog"
+      DATABASE_URL: "mysql+pymysql://microblog:password@{{ hostvars[groups['databases'][0]].ansible_host }}/microblog"
+    published_ports:
+      - "5000:5000" # <-- expose container port 5000 to host 5000
 
 - name: Debug database host
   ansible.builtin.debug:
