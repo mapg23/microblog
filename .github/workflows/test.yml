@@ -1,0 +1,29 @@
+name: test
+
+on:
+  push:
+    branches:
+      - ansible-deploy-test
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v5
+
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Install Ansible Galaxy roles/collections
+        working-directory: ansible
+        run: |
+          if [ -f requirements.yml ]; then ansible-galaxy install -r requirements.yml; fi
+
+      - name: Run Ansible deploy.yml
+        working-directory: ansible
+        run: |
+          ansible-playbook -i hosts deploy.yml
