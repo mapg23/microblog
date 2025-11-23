@@ -13,6 +13,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v5
 
+      - name: Install Python 3.12
+        run: |
+          sudo add-apt-repository -y ppa:deadsnakes/ppa
+          sudo apt update
+          sudo apt install -y python3.12 python3.12-venv python3.12-distutils
+
       - name: Install Ansible
         run: |
           sudo apt update
