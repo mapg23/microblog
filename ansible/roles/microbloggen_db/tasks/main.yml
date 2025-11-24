@@ -22,27 +22,44 @@
     name: docker.io
     state: present
 
-- name: Remove old MySQL container if it exists
+- name: Remove old MySQL container if it exists (Precaution)
   community.docker.docker_container:
     name: mysql-db
     state: absent
     force_kill: yes # ensures it’s stopped
 
+- name: Ensure MySQL data volume removed (Precaution)
+  community.docker.docker_volume:
+    name: db_data
+    state: absent
+
+- name: Create volume (Persistant data)
+  community.docker.docker_volume:
+    name: db_data
+
+- name: Copy initialization SQL to host (Add user)
+  ansible.builtin.copy:
+    dest: /tmp/init-microblog.sql
+    content: |
+      CREATE DATABASE IF NOT EXISTS microblog;
+      CREATE USER IF NOT EXISTS 'microblog'@'%' IDENTIFIED WITH mysql_native_password BY '{{ server_user_pass }}';
+      GRANT ALL PRIVILEGES ON microblog.* TO 'microblog'@'%';
+      FLUSH PRIVILEGES;
+
 - name: Start a fresh MySQL container
   community.docker.docker_container:
     name: mysql-db
-    image: mysql:latest
+    image: mysql:8.0.33
     state: started
     restart_policy: always
     env:
       MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - /tmp/init-microblog.sql:/docker-entrypoint-initdb.d/init-microblog.sql:ro
 
 - name: Debug database host
   ansible.builtin.debug:
     msg: "Running role on database host: {{ inventory_hostname }} (IP: {{ ansible_host | default('same as hostname') }})"
-
-- name: Debug custom variable
-  ansible.builtin.debug:
-    var: my_variable

@@ -1,59 +1,70 @@
 ---
--   name: Install packages
-    apt:
-        name: "{{ packages }}"
-        state: present
+- name: Set correct apt sources for Debian Buster archive
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list
+    content: |
+      deb http://archive.debian.org/debian buster main contrib non-free
+      deb http://archive.debian.org/debian-security buster/updates main contrib non-free
 
--   name: Check if certificate already exists.
-    stat:
-        path: /etc/letsencrypt/live/{{ domain_name }}/cert.pem
-    register: letsencrypt_cert
+- name: Update apt cache (allow unauthenticated for archive)
+  ansible.builtin.apt:
+    update_cache: yes
+    allow_unauthenticated: yes
 
--   name: debug msg to show if cert exist
-    debug: msg="{{ letsencrypt_cert.stat.exists }}"
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+    state: present
 
--   name: Stop services to allow certbot to generate a cert.
-    service:
-      name: nginx
-      state: stopped
-    when: not letsencrypt_cert.stat.exists
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ domain_name }}/cert.pem
+  register: letsencrypt_cert
 
--   name: Generate new certificate if one doesn't exist.
-    when: not letsencrypt_cert.stat.exists
-    command:
-      cmd: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
+- name: debug msg to show if cert exist
+  debug: msg="{{ letsencrypt_cert.stat.exists }}"
 
--   name: Remove default conf
-    file:
-        state: absent
-        path: /etc/nginx/sites-enabled/default
+- name: Stop services to allow certbot to generate a cert.
+  service:
+    name: nginx
+    state: stopped
+  when: not letsencrypt_cert.stat.exists
 
--   name: Template nginx config to server
-    copy:
-        src: nginx.conf
-        dest: /etc/nginx/nginx.conf
-        mode: "644"
+- name: Generate new certificate if one doesn't exist.
+  when: not letsencrypt_cert.stat.exists
+  command:
+    cmd: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
 
+- name: Remove default conf
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
 
--   name: Template nginx site config to server
-    template:
-        src: load-balancer.conf.j2
-        dest: /etc/nginx/sites-available/load-balancer.conf
-        mode: "644"
-    notify:
+- name: Template nginx config to server
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: "644"
+
+- name: Template nginx site config to server
+  template:
+    src: load-balancer.conf.j2
+    dest: /etc/nginx/sites-available/load-balancer.conf
+    mode: "644"
+  notify:
     - Restart nginx
 
--   name: Link site to enabled
-    file:
-        state: link
-        force: yes
-        src: /etc/nginx/sites-available/load-balancer.conf
-        path: /etc/nginx/sites-enabled/load-balancer.conf
-    notify:
+- name: Link site to enabled
+  file:
+    state: link
+    force: yes
+    src: /etc/nginx/sites-available/load-balancer.conf
+    path: /etc/nginx/sites-enabled/load-balancer.conf
+  notify:
     - Restart nginx
 
--   name: Start services after cert has been generated.
-    service:
-      name: nginx
-      state: started
-    when: not letsencrypt_cert.stat.exists
+- name: Start services after cert has been generated.
+  service:
+    name: nginx
+    state: started
+  when: not letsencrypt_cert.stat.exists
