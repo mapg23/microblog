@@ -54,9 +54,17 @@ jobs:
         working-directory: ansible
         run: |
           source ../venv/bin/activate
-          python3 -c "import importlib, sys; \
-          try: importlib.import_module('azure.cli'); print('azure.cli is installed'); \
-          except ImportError: print('ERROR: azure.cli is NOT installed'); sys.exit(1)"
+          python3 - <<'EOF'
+            import importlib
+            import sys
+            
+            try:
+                importlib.import_module('azure.cli')
+                print('azure.cli is installed')
+            except ImportError:
+                print('ERROR: azure.cli is NOT installed')
+                sys.exit(1)
+            EOF
         shell: bash
 
       - name: Run Ansible site.yml
