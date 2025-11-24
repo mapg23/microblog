@@ -36,8 +36,12 @@ jobs:
 
       - name: Install Azure
         run: |
-          pip install azure-mgmt-resource azure-mgmt-compute azure-mgmt-network msrest msrestazure
-  
+          pip install azure-cli azure-mgmt-compute azure-mgmt-resource azure-identity azure-mgmt-network
+
+      - name: install Azure fallback
+        run: |
+          pip install ansible[azure]
+
       - name: Install Ansible
         run: pip install "ansible>=10.0.0,<11.0.0"
 
