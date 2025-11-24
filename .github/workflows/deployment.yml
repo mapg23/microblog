@@ -28,17 +28,13 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
           docker push ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod
 
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
       - name: Set up Python virtualenv
         run: |
           python3 -m venv venv
           source venv/bin/activate
           pip install --upgrade pip setuptools wheel
           pip install "ansible[azure]>=10.0.0,<11.0.0"
-          pip install "azure==4.0.0"
+          pip install azure-cli
           pip install azure-mgmt-core
           pip install azure-mgmt-compute azure-mgmt-resource azure-identity azure-mgmt-network
         shell: bash
@@ -50,22 +46,12 @@ jobs:
           if [ -f requirements.yml ]; then ansible-galaxy install -r requirements.yml; fi
         shell: bash
 
-      - name: Check azure.cli is installed inside venv
-        working-directory: ansible
+      - name: Check Azure CLI installed
         run: |
-          source ../venv/bin/activate
-          python3 - <<'EOF'
-            import importlib
-            import sys
-            
-            try:
-                importlib.import_module('azure.cli')
-                print('azure.cli is installed')
-            except ImportError:
-                print('ERROR: azure.cli is NOT installed')
-                sys.exit(1)
-            EOF
-        shell: bash
+          source venv/bin/activate
+          pip list
+          which python
+          python -c "import azure.cli"
 
       - name: Run Ansible site.yml
         working-directory: ansible
