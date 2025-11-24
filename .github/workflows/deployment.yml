@@ -35,8 +35,7 @@ jobs:
           pip install --upgrade pip setuptools wheel
           pip install "ansible[azure]>=10.0.0,<11.0.0"
           pip install azure-cli
-          pip install azure-mgmt-core
-          pip install azure-mgmt-compute azure-mgmt-network azure-mgmt-resource azure-mgmt-dns azure-identity azure-mgmt-core
+          pip install azure-mgmt-compute azure-mgmt-network azure-mgmt-resource azure-mgmt-dns azure-identity azure-mgmt-core azure-mgmt-automation
         shell: bash
 
       - name: Install Ansible Galaxy roles/collections
