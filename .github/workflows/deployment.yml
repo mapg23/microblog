@@ -28,34 +28,30 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
           docker push ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod
 
-      - name: Install pip
-        run: sudo apt-get install -y python3-pip
-
-      - name: Install setuptools
-        run: sudo apt-get install -y python3-setuptools
-
-      - name: Install Azure
+      - name: Set up Python virtualenv
         run: |
-          pip install azure-cli azure-mgmt-compute azure-mgmt-resource azure-identity azure-mgmt-network
-
-      - name: install Azure fallback
-        run: |
-          pip  install ansible[azure]
-
-      - name: Install Ansible
-        run: pip install "ansible>=10.0.0,<11.0.0"
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip setuptools wheel
+          pip install "ansible[azure]>=10.0.0,<11.0.0"
+          pip install azure-mgmt-compute azure-mgmt-resource azure-identity azure-mgmt-network
+        shell: bash
 
       - name: Install Ansible Galaxy roles/collections
         working-directory: ansible
         run: |
+          source ../venv/bin/activate
           if [ -f requirements.yml ]; then ansible-galaxy install -r requirements.yml; fi
+        shell: bash
 
       - name: Run Ansible site.yml
         working-directory: ansible
         env:
           ANSIBLE_HOST_KEY_CHECKING: "false"
         run: |
+          source ../venv/bin/activate
           ansible-playbook \
             -i hosts site.yml \
-            -e "ansible_python_interpreter=/usr/bin/python3" \
+            -e "ansible_python_interpreter=../venv/bin/python3" \
             -e "release_tag=${{ github.event.release.tag_name }}"
+        shell: bash
