@@ -34,6 +34,11 @@ jobs:
       - name: Install setuptools
         run: sudo apt-get install -y python3-setuptools
 
+      - name: Install Azure
+        run: |
+          pip install azure
+          pip install azure-mgmt-resource
+  
       - name: Install Ansible
         run: pip install "ansible>=10.0.0,<11.0.0"
 
