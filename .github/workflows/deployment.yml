@@ -34,6 +34,7 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip setuptools wheel
           pip install "ansible[azure]>=10.0.0,<11.0.0"
+          pip install "azure==4.0.0"
           pip install azure-mgmt-compute azure-mgmt-resource azure-identity azure-mgmt-network
         shell: bash
 
