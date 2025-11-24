@@ -1,8 +1,0 @@
-- name: Test deployment
-  hosts: local
-  become: yes
-
-  tasks:
-    - name: Print a message on the GitHub runner
-      debug:
-        msg: "Ansible playbook deploy.yml executed successfully!"
