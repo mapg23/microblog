@@ -22,11 +22,14 @@
     name: docker.io
     state: present
 
-  # Change to github action variable that outputs the latest docker tag
+- name: Show release tag
+  debug:
+    msg: "Deploying Docker image tag: {{ release_tag }}"
+
 - name: Start microblogg
   community.docker.docker_container:
     name: "microblogg"
-    image: "maacke16/microblog:v11.0.1-prod"
+    image: "maacke16/microblog:{{ release_tag }}-prod"
     state: started
     restart_policy: always
     env:
