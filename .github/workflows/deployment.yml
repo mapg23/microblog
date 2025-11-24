@@ -28,13 +28,14 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
           docker push ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod
 
-      - name: Set up Python virtualenv
+      - name: Set up Python virtualenv and install Azure dependencies
         run: |
           python3 -m venv venv
           source venv/bin/activate
           pip install --upgrade pip setuptools wheel
           pip install "ansible[azure]>=10.0.0,<11.0.0"
-          pip install ansible[azure] azure-cli azure-mgmt-resource azure-mgmt-compute azure-mgmt-network azure-mgmt-dns azure-identity azure-mgmt-storage azure-mgmt-sql azure.mgmt.automation
+          curl -sSL https://raw.githubusercontent.com/ansible-collections/azure/36d034034bbc9bb1e83007d2a643d4a1af2f8776/requirements.txt -o azure-requirements.txt
+          pip install -r azure-requirements.txt
         shell: bash
 
       - name: Install Ansible Galaxy roles/collections
