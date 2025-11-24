@@ -1,6 +1,10 @@
 name: Deployment
 
 on:
+  push:
+    branches:
+      - ansible-deploy-test
+
   release:
     types:
       - published
@@ -40,7 +44,7 @@ jobs:
 
       - name: install Azure fallback
         run: |
-          pip install ansible[azure]
+          pip  install ansible[azure]
 
       - name: Install Ansible
         run: pip install "ansible>=10.0.0,<11.0.0"
