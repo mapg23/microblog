@@ -30,14 +30,12 @@ jobs:
 
       - name: Install pip
         run: sudo apt-get install -y python3-pip
-      
-      - name: Install Azure Ansible dependencies
-        run: pip install "ansible[azure]>=10.0.0,<11.0.0"
+
+      - name: Install setuptools
+        run: sudo apt-get install -y python3-setuptools
 
       - name: Install Ansible
-        run: |
-          sudo apt update
-          sudo apt install -y ansible
+        run: pip install "ansible>=10.0.0,<11.0.0"
 
       - name: Install Ansible Galaxy roles/collections
         working-directory: ansible
