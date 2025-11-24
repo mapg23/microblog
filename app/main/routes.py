@@ -8,6 +8,7 @@ from app import db
 from app.main.forms import EditProfileForm, PostForm
 from app.models import User, Post
 from app.main import bp
+import requests
 
 
 
@@ -42,6 +43,23 @@ def index():
     posts = current_user.followed_posts().all()
     return render_template("index.html", title='Home Page', form=form,
                            posts=posts)
+
+
+@bp.route('/version')
+def get_version():
+    """
+    Route for version of app
+    """
+    name = "maacke16"
+    image = "microblog"
+    page = 1
+    page_size = 100
+    url = f"https://hub.docker.com/v2/repositories/{name}/{image}/tags?page={page}&page_size={page_size}"
+    response = requests.get(url)
+    data = response.json()
+    tags = [tag["name"] for tag in data["results"]]
+
+    return render_template('version.html', title='Version', data=tags[0])
 
 
 

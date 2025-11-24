@@ -28,3 +28,10 @@ All notable changes to this project will be documented in this file.
 - Added following / unfollowing other users
 - View followed users in 'Home' feed
 - Github Actions will publish app to Docker Hub on new release
+
+## [12.0.0] - 2025-11-24
+
+- Implemented ansible functionality for the microblogg & database
+- Fixed loadbalancer and nginx config
+- Implemented CD design for ansible and github actions
+- Added route that shows which docker image microblogg is using
