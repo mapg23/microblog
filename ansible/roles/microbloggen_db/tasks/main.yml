@@ -22,22 +22,22 @@
     name: docker.io
     state: present
 
-- name: Remove old MySQL container if it exists
+- name: Remove old MySQL container if it exists (Precaution)
   community.docker.docker_container:
     name: mysql-db
     state: absent
     force_kill: yes # ensures it’s stopped
 
-- name: Ensure MySQL data volume removed
+- name: Ensure MySQL data volume removed (Precaution)
   community.docker.docker_volume:
     name: db_data
     state: absent
 
-- name: Create volume
+- name: Create volume (Persistant data)
   community.docker.docker_volume:
     name: db_data
 
-- name: Copy initialization SQL to host
+- name: Copy initialization SQL to host (Add user)
   ansible.builtin.copy:
     dest: /tmp/init-microblog.sql
     content: |
