@@ -36,8 +36,7 @@ jobs:
 
       - name: Install Azure
         run: |
-          pip install azure
-          pip install azure-mgmt-resource
+          pip install azure-mgmt-resource azure-mgmt-compute azure-mgmt-network msrest msrestazure
   
       - name: Install Ansible
         run: pip install "ansible>=10.0.0,<11.0.0"
