@@ -50,6 +50,15 @@ jobs:
           if [ -f requirements.yml ]; then ansible-galaxy install -r requirements.yml; fi
         shell: bash
 
+      - name: Check azure.cli is installed inside venv
+        working-directory: ansible
+        run: |
+          source ../venv/bin/activate
+          python3 -c "import importlib, sys; \
+          try: importlib.import_module('azure.cli'); print('azure.cli is installed'); \
+          except ImportError: print('ERROR: azure.cli is NOT installed'); sys.exit(1)"
+        shell: bash
+
       - name: Run Ansible site.yml
         working-directory: ansible
         env:
