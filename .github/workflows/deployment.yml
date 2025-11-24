@@ -28,6 +28,12 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod -f docker/Dockerfile_prod .
           docker push ${{ secrets.DOCKER_USERNAME }}/microblog:${{ github.event.release.tag_name }}-prod
 
+      - name: Install pip
+        run: sudo apt-get install -y python3-pip
+      
+      - name: Install Azure Ansible dependencies
+        run: pip install "ansible[azure]"
+
       - name: Install Ansible
         run: |
           sudo apt update
