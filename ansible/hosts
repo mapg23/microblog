@@ -2,11 +2,11 @@
 localhost ansible_connection=local
 
 [loadbalancer]
-mapg23.me ansible_host=52.178.145.207 ansible_user=deploy
+mapg23.me ansible_host=52.164.228.119 ansible_user=deploy
 
 [appservers]
-appserver1.mapg23.me ansible_host=52.178.145.136 ansible_user=deploy
-appserver2.mapg23.me ansible_host=52.178.145.248 ansible_user=deploy
+appserver1.mapg23.me ansible_host=52.178.176.199 ansible_user=deploy
+appserver2.mapg23.me ansible_host=52.178.176.82 ansible_user=deploy
 
 [databases]
-db ansible_host=52.178.145.232 ansible_user=deploy
+db ansible_host=52.178.183.186 ansible_user=deploy

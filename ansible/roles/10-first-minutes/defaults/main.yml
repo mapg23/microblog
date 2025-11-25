@@ -60,7 +60,9 @@ users_global_admin_users: []
 users_admin_groups: []
 
 # Project level admin users with account, login and sudo permissions
-users_admin_users: []
+users_admin_users:
+  - marcus
+  - hampus
 
 # Project users with account and login, but no sudo permission
 # users_regular_users:
