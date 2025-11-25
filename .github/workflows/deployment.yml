@@ -52,6 +52,11 @@ jobs:
           which python
           python -c "import azure.cli"
 
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Run Ansible site.yml
         working-directory: ansible
         env:
