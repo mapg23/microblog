@@ -57,14 +57,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Run Ansible site.yml
+      - name: Run Ansible deploy.yml
         working-directory: ansible
         env:
           ANSIBLE_HOST_KEY_CHECKING: "false"
         run: |
-          source ../venv/bin/activate
           ansible-playbook \
             -i hosts deploy.yml \
-            -e "ansible_python_interpreter=../venv/bin/python3" \
+            -e "ansible_python_interpreter=/usr/bin/python3" \
             -e "release_tag=${{ github.event.release.tag_name }}"
         shell: bash
