@@ -50,3 +50,7 @@ All notable changes to this project will be documented in this file.
 ## [12.0.29] - 2025-11-26
 
 - Rolling updates Fix
+
+## [12.0.30] - 2025-11-26
+
+- Rolling updates Fix
