@@ -92,7 +92,9 @@ users_app_groups: []
 # Unix groups that deploy user should have
 # users_deploy_groups:
 #   - sshusers
-users_deploy_groups: []
+users_deploy_groups:
+  - marcus
+  - hampus
 
 # These users (ssh keys) have access to the deploy user account
 # users_deploy_users:

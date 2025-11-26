@@ -1,4 +1,8 @@
 ---
+- name: Wait for cloud-init to finish
+  command: cloud-init status --wait
+  changed_when: false
+
 - name: Update apt cache (allow unauthenticated for archive)
   ansible.builtin.apt:
     update_cache: yes

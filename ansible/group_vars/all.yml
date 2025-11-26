@@ -17,3 +17,4 @@ server_user: "deploy"
 server_user_pass: "password" # change me
 server_user_groups:
   - sudo
+  - admin

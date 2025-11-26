@@ -4,6 +4,10 @@
     name: root
     password: "{{ root_password }}"
 
+- name: Wait for cloud-init to finish
+  command: cloud-init status --wait
+  changed_when: false
+
 - name: Update apt-cache and upgrade packages
   apt:
     force_apt_get: yes
@@ -34,7 +38,7 @@
 - name: Create user
   user:
     name: "{{ item.user }}"
-    password: "{{ server_user_pass }}"
+    password: "{{ server_user_pass  | password_hash('sha256') }}"
     state: present
     shell: /bin/bash
     groups: "{{ server_user_groups }}"
