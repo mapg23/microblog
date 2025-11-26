@@ -3,4 +3,5 @@ boto
 boto3
 ansible>=10.0.0,<11.0.0
 setuptools
+passlib
 PyMySQL

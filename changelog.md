@@ -29,9 +29,28 @@ All notable changes to this project will be documented in this file.
 - View followed users in 'Home' feed
 - Github Actions will publish app to Docker Hub on new release
 
-## [12.0.0] - 2025-11-24
+## [12.0.0] > [12.0.27] - 2025-11-20 - 2025-11-25
 
-- Implemented ansible functionality for the microblogg & database
-- Fixed loadbalancer and nginx config
-- Implemented CD design for ansible and github actions
-- Added route that shows which docker image microblogg is using
+- Added a loadbalancer VM
+- Added two appserver VMs
+- Added a database VM
+- Created a Hosts.ini file
+- Added users for management of the VMs
+
+- Added ansible/microblog_app.yml
+- Added ansible/microblog_db.yml
+- Fixed Loadbalancer to redirect trafic to appservers.
+- Added Actions Pipeline on new release
+
+## [12.0.28] - 2025-11-26
+
+- Added Rolling updates
+- Integrated Rolling updates into the actions pipeline
+
+## [12.0.29] - 2025-11-26
+
+- Rolling updates Fix
+
+## [12.0.30] - 2025-11-26
+
+- Rolling updates Fix

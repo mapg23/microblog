@@ -1,5 +1,14 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background: tomato !important;
+        }
+    </style>
+{% endblock %}
+
 {% block title %}
     {% if title %}{{ title }} - Microblog{% else %}Welcome to Microblog{% endif %}
 {% endblock %}

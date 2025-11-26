@@ -60,7 +60,9 @@ users_global_admin_users: []
 users_admin_groups: []
 
 # Project level admin users with account, login and sudo permissions
-users_admin_users: []
+users_admin_users:
+  - marcus
+  - hampus
 
 # Project users with account and login, but no sudo permission
 # users_regular_users:
@@ -78,7 +80,9 @@ users_regular_users:
 # Unix groups that regular users should have
 # users_regular_groups:
 #   - sshusers
-users_regular_groups: []
+users_regular_groups:
+  - sshusers
+  - sudo
 
 # Unix groups that the app user should have
 # users_app_groups:
@@ -88,12 +92,16 @@ users_app_groups: []
 # Unix groups that deploy user should have
 # users_deploy_groups:
 #   - sshusers
-users_deploy_groups: []
+users_deploy_groups:
+  - marcus
+  - hampus
 
 # These users (ssh keys) have access to the deploy user account
 # users_deploy_users:
 #   - jake
-users_deploy_users: []
+users_deploy_users:
+  - marcus
+  - hampus
 
 # These users (ssh keys) have access to the app user account
 # users_app_users:

@@ -1,10 +1,7 @@
 ---
-- name: Set correct apt sources for Debian Buster archive
-  ansible.builtin.copy:
-    dest: /etc/apt/sources.list
-    content: |
-      deb http://archive.debian.org/debian buster main contrib non-free
-      deb http://archive.debian.org/debian-security buster/updates main contrib non-free
+- name: Wait for cloud-init to finish
+  command: cloud-init status --wait
+  changed_when: false
 
 - name: Update apt cache (allow unauthenticated for archive)
   ansible.builtin.apt:
