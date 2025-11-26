@@ -46,3 +46,7 @@ All notable changes to this project will be documented in this file.
 
 - Added Rolling updates
 - Integrated Rolling updates into the actions pipeline
+
+## [12.0.29] - 2025-11-26
+
+- Rolling updates Fix
