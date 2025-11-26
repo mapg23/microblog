@@ -3,6 +3,8 @@
   serial: 1 # Rolling Update variabel
   vars:
     db_host: "{{ hostvars[groups['databases'][0]].ansible_host }}"
+    correct_image: "maacke16/microblog:{{ release_tag }}-prod"
+    # correct_image: "maacke16/microblog:12.0.29-prod"
 
   tasks:
     - name: Stopping old container
@@ -20,7 +22,7 @@
       community.docker.docker_container:
         name: "microblogg"
         image: "maacke16/microblog:{{ release_tag }}-prod"
-        # image: "maacke16/microblog:12.0.26-prod"
+        # image: "maacke16/microblog:12.0.29-prod"
         state: started
         restart_policy: always
         env:
@@ -46,10 +48,16 @@
 
     - name: Get current docker image version
       community.docker.docker_container_info:
-        name: microblog
+        name: microblogg
       register: active_container
 
     - name: Fail if container is not using the latest image
       fail:
         msg: "Docker is not running the latest image"
-      when: active_container.container.Config.Image != "maacke16/microblog/{{ release_tag }}-prod"
+      when: active_container.container.Config.Image != correct_image
+
+    - name: Debug image version
+      debug:
+        msg:
+          - "Correct image: {{ correct_image }}"
+      when: active_container.container.Config.Image == correct_image
