@@ -63,7 +63,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "false"
         run: |
           ansible-playbook \
-            -i hosts deploy.yml \
+            -i hosts rolling_update.yml \
             -e "ansible_python_interpreter=/usr/bin/python3" \
             -e "release_tag=${{ github.event.release.tag_name }}"
         shell: bash

@@ -1,0 +1,45 @@
+- hosts: appservers
+  become: yes
+  serial: 1 # Rolling Update variabel
+  vars:
+    db_host: "{{ hostvars[groups['databases'][0]].ansible_host }}"
+
+  tasks:
+    - name: Stopping old container
+      community.docker.docker_container:
+        name: microblogg
+        state: stopped
+        force_kill: yes
+
+    - name: Removing old container
+      community.docker.docker_container:
+        name: microblogg
+        state: absent
+
+    - name: Starting microblogg
+      community.docker.docker_container:
+        name: "microblogg"
+        image: "maacke16/microblog:{{ release_tag }}-prod"
+        # image: "maacke16/microblog:12.0.26-prod"
+        state: started
+        restart_policy: always
+        env:
+          SECRET_KEY: "my-secret-key"
+          DATABASE_URL: "mysql+pymysql://microblog:password@{{ db_host }}/microblog"
+        published_ports:
+          - "5000:5000"
+
+    - name: Checking container health
+      community.docker.docker_container_info:
+        name: microblogg
+      register: container_info
+      retries: 10
+      delay: 3
+      until: container_info.container.State.Running
+
+    - name: Running database migrations (DB Update)
+      shell: "docker exec microblogg sh -c 'source .venv/bin/activate && flask db upgrade'"
+      register: migration
+      retries: 10
+      delay: 3
+      until: migration.rc == 0
