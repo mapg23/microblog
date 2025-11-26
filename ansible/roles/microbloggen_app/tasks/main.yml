@@ -18,8 +18,8 @@
 - name: Start microblogg
   community.docker.docker_container:
     name: "microblogg"
-    image: "maacke16/microblog:12.0.26-prod"
-    # image: "maacke16/microblog:{{ release_tag }}-prod"
+    # image: "maacke16/microblog:12.0.26-prod"
+    image: "maacke16/microblog:{{ release_tag }}-prod"
     state: started
     restart_policy: always
     env:
