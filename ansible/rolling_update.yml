@@ -43,3 +43,13 @@
       retries: 10
       delay: 3
       until: migration.rc == 0
+
+    - name: Get current docker image version
+      community.docker.docker_container_info:
+        name: microblog
+      register: active_container
+
+    - name: Fail if container is not using the latest image
+      fail:
+        msg: "Docker is not running the latest image"
+      when: active_container.container.Config.Image != "maacke16/microblog/{{ release_tag }}-prod"
