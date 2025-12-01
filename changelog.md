@@ -54,3 +54,7 @@ All notable changes to this project will be documented in this file.
 ## [12.0.30] - 2025-11-26
 
 - Rolling updates Fix
+
+## [12.0.31] - 2025-12-01
+
+- Added an ansible playbook for updating security rule. (update_sg.yml)

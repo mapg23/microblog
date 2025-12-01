@@ -4,7 +4,7 @@
   vars:
     db_host: "{{ hostvars[groups['databases'][0]].ansible_host }}"
     correct_image: "maacke16/microblog:{{ release_tag }}-prod"
-    # correct_image: "maacke16/microblog:12.0.29-prod"
+    # correct_image: "maacke16/microblog:12.0.30-prod"
 
   tasks:
     - name: Stopping old container
@@ -22,7 +22,7 @@
       community.docker.docker_container:
         name: "microblogg"
         image: "maacke16/microblog:{{ release_tag }}-prod"
-        # image: "maacke16/microblog:12.0.29-prod"
+        # image: "maacke16/microblog:12.0.30-prod"
         state: started
         restart_policy: always
         env:

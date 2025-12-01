@@ -1,0 +1,25 @@
+---
+- name: Update inbound firewall rule in Azure NSG
+  hosts: localhost
+  connection: local
+  vars:
+    resource_group: "{{ resource_group }}"
+    security_group: "appserver-sg"
+    loadbalancer: "mapg23.me"
+
+  tasks:
+    - name: Create rule allow-vnet (5000 from LB)
+      azure.azcollection.azure_rm_securitygrouprule:
+        resource_group: "{{ resource_group }}"
+        security_group_name: "{{ security_group }}"
+        name: "allow-vnet"
+        description: "Allow LB to access appserver on port 5000"
+        priority: 1012
+        direction: "Inbound"
+        access: "Allow"
+        protocol: "Tcp"
+        source_port_range: "*"
+        destination_port_range: "5000"
+        # The key part:
+        source_address_prefix: "{{ hostvars[loadbalancer].ansible_host }}"
+        destination_address_prefix: "*"
