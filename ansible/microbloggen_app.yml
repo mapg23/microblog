@@ -1,5 +1,5 @@
 ---
-- hosts: appservers
+- hosts: appservers_group
   connection: ssh
   become: yes
   become_method: sudo

@@ -2,11 +2,7 @@
 - name: Set root password
   user:
     name: root
-    password: "{{ root_password }}"
-
-- name: Wait for cloud-init to finish
-  command: cloud-init status --wait
-  changed_when: false
+    password: "{{ root_password  | password_hash('sha256') }}"
 
 - name: Update apt-cache and upgrade packages
   apt:

@@ -1,5 +1,5 @@
 ---
-- hosts: databases
+- hosts: databases_group
   gather_facts: false
   connection: ssh
   become: yes

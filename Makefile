@@ -221,3 +221,14 @@ install-deploy:
 .PHONY: test-bandit
 test-bandit:
 	@$(py) -m bandit -r app/ -ll
+
+.PHONY: trivy-image
+trivy-image:
+	@LATEST_TAG=$$(curl -s "https://registry.hub.docker.com/v2/repositories/maacke16/microblog/tags" \
+		| jq -r '.results | sort_by(.last_updated) | last | .name'); \
+	echo "Scanning image: maacke16/microblog:$$LATEST_TAG"; \
+	trivy image maacke16/microblog:$$LATEST_TAG
+
+.PHONY: trivy-fs
+trivy-fs:
+	trivy fs --scanners vuln,secret,misconfig --skip-dirs .venv .

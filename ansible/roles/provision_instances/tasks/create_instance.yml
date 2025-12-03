@@ -39,6 +39,19 @@
     loop_var: relative_name
   delegate_to: 127.0.0.1
 
+# Adds DNS Records to appserver 1 and 2
+- name: Ensure "A" records for appservers
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "{{ iname }}"
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  when: iname in ['appserver1', 'appserver2']
+  delegate_to: 127.0.0.1
+
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"

@@ -1,11 +1,11 @@
 http {
    upstream app-hosts {
       least_conn;
-      {% for host in groups['appservers'] %}
+      {% for host in groups['appservers_group'] %}
          server {{ hostvars[host].ansible_host }}:5000;
       {% endfor %}
 
-      {% if groups['appservers'] | length == 0 %}
+      {% if groups['appservers_group'] | length == 0 %}
          server 127.0.0.1:5000;  # fallback
       {% endif %}
    }
