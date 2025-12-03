@@ -3,10 +3,9 @@ Contains tests for app.models.User class
 """
 # pylint: disable=redefined-outer-name,unused-argument
 # pylint: disable=redefined-outer-name
+from datetime import datetime, timedelta
 import pytest
 from app.models import User, Post
-from datetime import datetime, timedelta
-from unittest import mock
 from app import db
 
 @pytest.fixture

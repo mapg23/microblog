@@ -2,13 +2,13 @@
 Contains routes for main purpose of app
 """
 from datetime import datetime
+import requests
 from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user, login_required
 from app import db
 from app.main.forms import EditProfileForm, PostForm
 from app.models import User, Post
 from app.main import bp
-import requests
 
 
 

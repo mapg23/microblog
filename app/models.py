@@ -48,18 +48,41 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
     
     def follow(self, user):
+        """
+        Docstring for follow
+        
+        :param self: Description
+        :param user: Description
+        """
         if not self.is_following(user):
             self.followed.append(user)
 
     def unfollow(self, user):
+        """
+        Docstring for unfollow
+        
+        :param self: Description
+        :param user: Description
+        """
         if self.is_following(user):
             self.followed.remove(user)
 
     def is_following(self, user):
+        """
+        Docstring for is_following
+        
+        :param self: Description
+        :param user: Description
+        """
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
     
     def followed_posts(self):
+        """
+        Docstring for followed_posts
+        
+        :param self: Description
+        """
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
                 followers.c.follower_id == self.id)
@@ -78,7 +101,7 @@ class User(UserMixin, db.Model):
         """
         Return Gravatar URL based on email
         """
-        digest = md5(self.email.lower().encode("utf-8"), usedforsecurity=False).hexdigest()
+        digest = md5(self.email.lower().encode("utf-8")).hexdigest() # nosec
         url = f'https://www.gravatar.com/avatar/{digest}?d=retro&s={size}'
         current_app.logger.debug(f"Get gravatar {url}")
         return url
