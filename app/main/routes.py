@@ -55,7 +55,7 @@ def get_version():
     page = 1
     page_size = 100
     url = f"https://hub.docker.com/v2/repositories/{name}/{image}/tags?page={page}&page_size={page_size}"
-    response = requests.get(url)
+    response = requests.get(url, timeout=5)
     data = response.json()
     tags = [tag["name"] for tag in data["results"]]
 
