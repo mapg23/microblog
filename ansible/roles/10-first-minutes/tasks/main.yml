@@ -50,7 +50,7 @@
   with_items: "{{ users_users }}"
   when: item.github is defined and item.user in users_regular_users
 
-- name: Create user
+- name: Create server user
   user:
     name: "{{ server_user }}"
     password: "{{ server_user_pass }}"
