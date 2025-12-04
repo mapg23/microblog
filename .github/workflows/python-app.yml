@@ -6,7 +6,7 @@ name: Python application
 on:
   workflow_call:
   push:
-    branches: ["master"]
+    branches: ["*"]
   pull_request:
     branches: ["master"]
 
