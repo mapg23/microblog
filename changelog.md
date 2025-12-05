@@ -58,3 +58,21 @@ All notable changes to this project will be documented in this file.
 ## [12.0.31] - 2025-12-01
 
 - Added an ansible playbook for updating security rule. (update_sg.yml)
+
+## [13.0.0] - Datum
+
+- Lägg till
+
+## [13.0.1] - Datum
+
+- Lägg till
+
+## [13.0.2] - Datum
+
+- Lägg till
+
+## [13.0.4] - 2025-12-05
+
+- Added task inside 10 first minutes so that new ssh config auto pushes to all servers
+
+- Fixed with microblogg route problem for endpoint version.
