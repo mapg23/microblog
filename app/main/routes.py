@@ -59,7 +59,12 @@ def get_version():
     data = response.json()
     tags = [tag["name"] for tag in data["results"]]
 
-    return render_template('version.html', title='Version', data=tags[0])
+    if tags:
+        version = tags[0] 
+    else:
+        version = "No tags found"
+
+    return render_template('version.html', title='Version', data=version)
 
 
 

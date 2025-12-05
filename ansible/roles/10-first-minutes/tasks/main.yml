@@ -90,13 +90,15 @@
 - name: flush handlers to restart SSH
   meta: flush_handlers # we cant do it later because after this we cant ssh as root
 
-- name: Only allow user to ssh
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: "^AllowUsers"
-    line: "AllowUsers {{ server_user }}"
-    state: present
-  # ignore_errors: yes
+- name: Deploy custom sshd_config
+  template:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: "0600"
+    newline_sequence: '\n'
+    validate: /usr/sbin/sshd -t -f %s
 
 - name: Remove default user
   remote_user: "{{ server_user }}"
@@ -105,4 +107,4 @@
     state: absent
     force: yes
     remove: yes
-  # ignore_errors: yes
+# ignore_errors: yes

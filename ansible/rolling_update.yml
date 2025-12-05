@@ -3,8 +3,8 @@
   serial: 1 # Rolling Update variabel
   vars:
     db_host: "{{ hostvars[groups['databases_group'][0]].ansible_host }}"
-    # correct_image: "maacke16/microblog:{{ release_tag }}-prod"
-    correct_image: "maacke16/microblog:12.0.30-prod"
+    correct_image: "maacke16/microblog:{{ release_tag }}-prod"
+    # correct_image: "maacke16/microblog:12.0.30-prod"
 
   tasks:
     - name: Stopping old container
@@ -21,8 +21,8 @@
     - name: Starting microblogg
       community.docker.docker_container:
         name: "microblogg"
-        # image: "maacke16/microblog:{{ release_tag }}-prod"
-        image: "maacke16/microblog:12.0.30-prod"
+        image: "maacke16/microblog:{{ release_tag }}-prod"
+        # image: "maacke16/microblog:12.0.30-prod"
         state: started
         restart_policy: always
         env:
