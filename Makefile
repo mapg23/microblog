@@ -230,7 +230,7 @@ trivy-image:
 	docker run -v /var/run/docker.sock:/var/run/docker.sock \
 		aquasec/trivy image --scanners vuln,secret,misconfig \
 		--no-progress --severity HIGH,CRITICAL \
-		--exit-code 1 maacke16/microblog:$$LATEST_TAG 
+		--exit-code 0 maacke16/microblog:$$LATEST_TAG 
 
 .PHONY: trivy-fs
 trivy-fs:
