@@ -76,3 +76,7 @@ All notable changes to this project will be documented in this file.
 - Added task inside 10 first minutes so that new ssh config auto pushes to all servers
 
 - Fixed with microblogg route problem for endpoint version.
+
+## [13.0.5] - 2025-12-07
+
+- Added tests for bandit, trivy and dockler to run in actions
