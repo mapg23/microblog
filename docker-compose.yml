@@ -36,5 +36,7 @@ services:
       - ./app:/home/microblog/app
       - ./tests:/home/microblog/tests
 
+  trivy:
+
 volumes:
   mysql_data:

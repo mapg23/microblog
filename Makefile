@@ -226,9 +226,26 @@ test-bandit:
 trivy-image:
 	@LATEST_TAG=$$(curl -s "https://registry.hub.docker.com/v2/repositories/maacke16/microblog/tags" \
 		| jq -r '.results | sort_by(.last_updated) | last | .name'); \
-	echo "Scanning image: maacke16/microblog:$$LATEST_TAG"; \
-	trivy image maacke16/microblog:$$LATEST_TAG
+	echo "Scanning Docker image with tag: $$LATEST_TAG..."; \
+	docker run -v /var/run/docker.sock:/var/run/docker.sock \
+		aquasec/trivy image --scanners vuln,secret,misconfig \
+		--no-progress --severity HIGH,CRITICAL \
+		--exit-code 1 maacke16/microblog:$$LATEST_TAG 
 
 .PHONY: trivy-fs
 trivy-fs:
-	trivy fs --scanners vuln,secret,misconfig --skip-dirs .venv .
+	docker run --rm -v .:/repo -w /repo \
+		aquasec/trivy:latest fs --scanners vuln,secret,misconfig \
+		--severity HIGH,CRITICAL --exit-code 1 --no-progress \
+		--skip-dirs .venv,venv .
+
+.PHONY: dockle
+dockle:
+	@LATEST_TAG=$$(curl -s "https://registry.hub.docker.com/v2/repositories/maacke16/microblog/tags" \
+		| jq -r '.results | sort_by(.last_updated) | last | .name'); \
+	DOCKLE_VERSION=$$(curl --silent https://api.github.com/repos/goodwithtech/dockle/releases/latest \
+		| jq -r '.tag_name' | sed 's/^v//'); \
+	echo "Scanning image: maacke16/microblog:$$LATEST_TAG with Dockle $$DOCKLE_VERSION..."; \
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+		goodwithtech/dockle:v$$DOCKLE_VERSION \
+		maacke16/microblog:$$LATEST_TAG
