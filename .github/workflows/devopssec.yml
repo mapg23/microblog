@@ -26,7 +26,7 @@ jobs:
         run: make install-test
 
       - name: Run Bandit
-        run: make test-Bandit
+        run: make test-bandit
 
       - name: Run trivy Image
         run: make trivy-image
