@@ -241,7 +241,7 @@ local-trivy-image:
 	docker run -v /var/run/docker.sock:/var/run/docker.sock \
 		aquasec/trivy image \
 		--scanners vuln,secret,misconfig \
-		--no-progress
+		--no-progress \
 		--severity HIGH,CRITICAL \
 		--exit-code 1 \
 		ci-microblog
