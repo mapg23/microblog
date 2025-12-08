@@ -229,8 +229,22 @@ trivy-image:
 	echo "Scanning Docker image with tag: $$LATEST_TAG..."; \
 	docker run -v /var/run/docker.sock:/var/run/docker.sock \
 		aquasec/trivy image --scanners vuln,secret,misconfig \
-		--no-progress --severity CRITICAL \
+		--no-progress --severity HIGH,CRITICAL \
 		--exit-code 1 maacke16/microblog:$$LATEST_TAG 
+
+.PHONY: local-trivy-image
+local-trivy-image:
+	echo "Building local Docker image...";
+	docker build -t ci-microblog -f docker/Dockerfile_prod .
+
+	echo "Scanning local Docker image...";
+	docker run -v /var/run/docker.sock:/var/run/docker.sock \
+		aquasec/trivy image \
+		--scanners vuln,secret,misconfig \
+		--no-progress \
+		--severity HIGH,CRITICAL \
+		--exit-code 1 \
+		ci-microblog
 
 .PHONY: trivy-fs
 trivy-fs:
