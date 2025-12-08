@@ -3,9 +3,9 @@ name: DevOpSec
 on:
   workflow_call:
   push:
-    branches: ["master"]
+    branches: ["*"]
   pull_request:
-    branches: ["master"]
+    branches: ["*"]
 
 permissions:
   contents: read
@@ -29,7 +29,7 @@ jobs:
         run: make test-bandit
 
       - name: Run trivy Image
-        run: make trivy-image
+        run: make local-trivy-image
 
       - name: Run trivy fs
         run: make trivy-fs
