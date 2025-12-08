@@ -239,7 +239,7 @@ local-trivy-image:
 
 	echo "Scanning local Docker image...";
 	docker run -v /var/run/docker.sock:/var/run/docker.sock \
-		aquasec/trivy image
+		aquasec/trivy image \
 		--scanners vuln,secret,misconfig \
 		--no-progress
 		--severity HIGH,CRITICAL \
