@@ -52,6 +52,19 @@
   when: iname in ['appserver1', 'appserver2']
   delegate_to: 127.0.0.1
 
+# Adds DNS Record for Database
+- name: Ensure "A" record for database
+  azure_rm_dnsrecordset:
+    resource_group: "{{ resource_group }}"
+    relative_name: "db"
+    zone_name: "{{ domain_name }}"
+    record_type: A
+    state: present
+    records:
+      - entry: "{{ output_ip_address.state.ip_address }}"
+  when: iname == 'database'
+  delegate_to: 127.0.0.1
+
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
