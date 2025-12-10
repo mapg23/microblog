@@ -258,8 +258,8 @@ dockle:
 	@LATEST_TAG=$$(curl -s "https://registry.hub.docker.com/v2/repositories/maacke16/microblog/tags" \
 		| jq -r '.results | sort_by(.last_updated) | last | .name'); \
 	DOCKLE_VERSION=$$(curl --silent https://api.github.com/repos/goodwithtech/dockle/releases/latest \
-		| jq -r '.tag_name' | sed 's/^v//'); \
+		| jq -r '.tag_name'); \
 	echo "Scanning image: maacke16/microblog:$$LATEST_TAG with Dockle $$DOCKLE_VERSION..."; \
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-		goodwithtech/dockle:v$$DOCKLE_VERSION \
+		goodwithtech/dockle:$$DOCKLE_VERSION \
 		maacke16/microblog:$$LATEST_TAG
