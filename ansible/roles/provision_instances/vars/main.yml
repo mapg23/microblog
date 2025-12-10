@@ -1,5 +1,8 @@
 ---
 instances:
+  - name: monitoring
+    type: monitoring
+
   - name: appserver1
     type: appserver
 

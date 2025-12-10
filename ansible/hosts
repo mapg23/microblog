@@ -10,3 +10,6 @@ appserver2.mapg23.me ansible_user=deploy
 
 [databases_group]
 db.mapg23.me ansible_user=deploy
+
+[monitoring_group]
+monitor.mapg23.me ansible_user=deploy

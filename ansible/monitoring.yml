@@ -1,0 +1,10 @@
+---
+- hosts: monitoring_group
+  gather_facts: false
+  connection: ssh
+  become: yes
+  become_method: sudo
+  collections:
+    - azure.azcollection
+  roles:
+    - monitoring

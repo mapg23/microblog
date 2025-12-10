@@ -1,4 +1,60 @@
+networks:
+  monitor:
+
+
+volumes:
+  prometheus-data: {}
+  grafana-data: {}
+  mysql_data:
+
 services:
+  node-exporter:
+    image: prom/node-exporter:v1.2.2
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    ports:
+      - "9100:9100"
+    networks:
+      - monitor
+
+  prometheus:
+    image: prom/prometheus:v2.31.1
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=24h"
+      - "--web.enable-lifecycle"
+    networks:
+      - monitor
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:8.2.4
+    restart: unless-stopped
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - monitor
+    ports:
+      - "3000:3000"
+
   mysql:
     image: mysql/mysql-server:5.7
     container_name: mysql
@@ -10,10 +66,12 @@ services:
       MYSQL_PASSWORD: "database-password"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - monitor
 
   prod:
     build:
-      context: .
+      context: . 
       dockerfile: docker/Dockerfile_prod
 
     image: "maacke16/microblog:1.0.0-prod"
@@ -25,6 +83,9 @@ services:
     environment:
       SECRET_KEY: "my-secret-key"
       DATABASE_URL: "mysql+pymysql://microblog:database-password@mysql/microblog"
+    networks:
+      - monitor
+
 
   tests:
     image: microblog_tests:prod
@@ -36,7 +97,3 @@ services:
       - ./app:/home/microblog/app
       - ./tests:/home/microblog/tests
 
-  trivy:
-
-volumes:
-  mysql_data:
