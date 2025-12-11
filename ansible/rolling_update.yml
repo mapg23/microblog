@@ -3,8 +3,8 @@
   serial: 1 # Rolling Update variabel
   vars:
     db_host: "{{ groups['databases_group'][0] }}"
-    correct_image: "maacke16/microblog:14.0.1-prod"
-    # correct_image: "maacke16/microblog:{{ release_tag }}-prod"
+    correct_image: "maacke16/microblog:{{ release_tag }}-prod"
+    # correct_image: "maacke16/microblog:14.0.1-prod"
 
 
   tasks:
@@ -20,7 +20,8 @@
     - name: Starting microblogg
       community.docker.docker_container:
         name: microblogg
-        image: "maacke16/microblog:14.0.1-prod"
+        # image: "maacke16/microblog:14.0.1-prod"
+        image: "maacke16/microblog:{{ release_tag }}-prod"
         state: started
         restart_policy: always
         env:
