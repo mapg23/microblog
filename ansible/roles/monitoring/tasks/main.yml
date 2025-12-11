@@ -31,6 +31,24 @@
     name: grafana-data
     state: present
 
+- name: Import prometheus config
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: prometheus.yml
+    mode: '0644'
+
+- name: Ensure Grafana cfg dir exists
+  ansible.builtin.file:
+    path: /etc/grafana
+    state: directory
+    mode: '0755'
+
+- name: Deploy grafana cfg
+  ansible.builtin.template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+    mode: '0644'
+
 - name: Start node-exporter
   community.docker.docker_container:
     name: node-exporter
@@ -49,7 +67,7 @@
     published_ports:
       - "9100:9100"
     networks:
-      - monitor
+      - name: monitor
 
 - name: Start Prometheus
   community.docker.docker_container:
@@ -69,8 +87,8 @@
       - "--web.enable-lifecycle"
     published_ports:
       - "9090:9090"
-    nerworks:
-      - monitor
+    networks:
+      - name: monitor
 
 - name: Start Grafana
   community.docker.docker_container:
@@ -79,9 +97,10 @@
     state: started
     restart_policy: unless-stopped
     volumes:
-      - grafana-data:/var/liv/grafana:8.2.4
+      - grafana-data:/var/lib/grafana
+      - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
     networks:
-      - monitor
+      - name: monitor
     published_ports:
       - "3000:3000" # <-- Change to grafana port
 

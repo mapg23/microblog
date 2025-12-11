@@ -74,7 +74,7 @@ sg_groups:
         protocol: Tcp
         destination_port_range: 22
         access: Allow
-        priority: 1004
+        priority: 1001
         direction: Inbound
         source_address_prefix: "0.0.0.0/0"
 
@@ -90,5 +90,30 @@ sg_groups:
         destination_port_range: 443
         access: Allow
         priority: 1003
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+      
+      - name: Grafana
+        protocol: Tcp
+        destination_port_range: 3000
+        access: Allow
+        priority: 1004
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+      
+
+      - name: Prometheus
+        protocol: Tcp
+        destination_port_range: 9090
+        access: Allow
+        priority: 1005
+        direction: Inbound
+        source_address_prefix: "0.0.0.0/0"
+
+      - name: NodeExporter
+        protocol: Tcp
+        destination_port_range: 9100
+        access: Allow
+        priority: 1006
         direction: Inbound
         source_address_prefix: "0.0.0.0/0"
