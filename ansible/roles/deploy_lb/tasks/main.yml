@@ -1,4 +1,9 @@
 ---
+
+- name: Debug hostvars
+  debug:
+    var: groups['appservers_group'][0]
+
 - name: Update apt cache (allow unauthenticated for archive)
   ansible.builtin.apt:
     update_cache: yes

@@ -2,16 +2,15 @@
   become: yes
   serial: 1 # Rolling Update variabel
   vars:
-    db_host: "{{ hostvars[groups['databases_group'][0]].ansible_host }}"
-    correct_image: "maacke16/microblog:{{ release_tag }}-prod"
-    # correct_image: "maacke16/microblog:12.0.30-prod"
+    db_host: "{{ groups['databases_group'][0] }}"
+    correct_image: "maacke16/microblog:14.0.1-prod"
+    # correct_image: "maacke16/microblog:{{ release_tag }}-prod"
+
 
   tasks:
-    - name: Stopping old container
-      community.docker.docker_container:
-        name: microblogg
-        state: stopped
-        force_kill: yes
+    - name: Debug DB HOST
+      debug:
+        msg: "DB HOST = {{ db_host }}"
 
     - name: Removing old container
       community.docker.docker_container:
@@ -20,9 +19,8 @@
 
     - name: Starting microblogg
       community.docker.docker_container:
-        name: "microblogg"
-        image: "maacke16/microblog:{{ release_tag }}-prod"
-        # image: "maacke16/microblog:12.0.30-prod"
+        name: microblogg
+        image: "maacke16/microblog:14.0.1-prod"
         state: started
         restart_policy: always
         env:
@@ -30,6 +28,7 @@
           DATABASE_URL: "mysql+pymysql://microblog:password@{{ db_host }}/microblog"
         published_ports:
           - "5000:5000"
+
 
     - name: Checking container health
       community.docker.docker_container_info:

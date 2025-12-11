@@ -2,7 +2,7 @@ http {
    upstream app-hosts {
       least_conn;
       {% for host in groups['appservers_group'] %}
-         server {{ hostvars[host].ansible_host }}:5000;
+         server {{ host }}:5000;
       {% endfor %}
 
       {% if groups['appservers_group'] | length == 0 %}

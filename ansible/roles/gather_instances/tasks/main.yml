@@ -22,6 +22,6 @@
   with_items: "{{ az_facts.vms }}"
   when: item.tags.PublicIP is defined and item.power_state == "running"
 
-- name: Display all variables/facts known for a host
-  debug:
-    var: hostvars
+# - name: Display all variables/facts known for a host
+#   debug:
+#     var: hostvars
