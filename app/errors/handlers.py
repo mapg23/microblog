@@ -34,17 +34,7 @@ def internal_error(error):
     return render_template('errors/500.html'), 500
 
 @bp.app_errorhandler(418)
-def teapot_error(error):
+def teapot_error(_error):
     """Handle the I'm a teapot error"""
     app_errors.labels(type="418").inc()
     return "I'm a teapot ☕", 418
-
-@bp.app_errorhandler(Exception)
-def unhandled_exception(error):
-    """
-    Catch-all for unexpected exceptions (5xx)
-    """
-    current_app.logger.exception(error)
-    app_errors.labels(type="exception").inc()
-    db.session.rollback()
-    raise error
