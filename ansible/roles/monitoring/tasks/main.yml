@@ -104,11 +104,11 @@
     published_ports:
       - "3000:3000" # <-- Change to grafana port
 
-# - name: Start Alertmanager
-#   community.docker.docker_container:
-#     name: "Alertmanager"
-#     image: ""
-#     state: started
-#     restart_policy: always
-#     published_ports:
-#       - "0000:0000"
+- name: Start Alertmanager
+  community.docker.docker_container:
+    name: "Alertmanager"
+    image: "prom/alertmanager"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "9093:9093"
