@@ -10,14 +10,11 @@ scrape_configs:
       - targets: ["0.0.0.0:9090"]
   
   - job_name: "flask"
-    static_configs:
-      - targets: ["prod:5000"] # Ändra till vm  ip
-        labels:
-          instance: flask
-
-  - job_name: "flask metrics"
+    scheme: https
     metrics_path: /metrics
+    tls_config:
+      insecure_skip_verify: true
     static_configs:
-      - targets: ["prod:5000"]
+      - targets: ["mapg23.me"]
         labels:
           instance: flask
