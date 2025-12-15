@@ -31,11 +31,21 @@
     name: grafana-data
     state: present
 
+- name: Ensure Prometheus config directory exists
+  ansible.builtin.file:
+    path: /etc/prometheus
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+
 - name: Import prometheus config
   ansible.builtin.template:
     src: prometheus.yml.j2
-    dest: prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
     mode: '0644'
+
 
 - name: Ensure Grafana cfg dir exists
   ansible.builtin.file:
@@ -75,8 +85,9 @@
     image: "prom/prometheus:v2.31.1"
     state: started
     restart_policy: unless-stopped
+    recreate: yes
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
