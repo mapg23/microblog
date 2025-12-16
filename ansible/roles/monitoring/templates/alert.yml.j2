@@ -1,6 +1,22 @@
 groups:
 - name: flask-error
   rules:
+
+  - alert: AlwaysFiringTest
+    expr: vector(1)
+    for: 10s
+    labels:
+      severity: test
+    annotations:
+      summary: "Test alert"
+      description: "This alert always fires"
+
+  - alert: Microblog404Burst
+    expr: increase(microblog_errors_total{type="404"}[30s]) > 0
+    for: 30s
+    labels:
+      severity: warning
+
   - alert: HighMicroblogErrorRate
     expr: rate(microblog_errors_total{type="404"}[30s]) * 60 > 20
     for: 30s

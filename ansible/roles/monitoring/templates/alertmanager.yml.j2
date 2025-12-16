@@ -2,7 +2,14 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: default
+  receiver: webhook-receiver
+  group_by: ['alertname']
+  group_wait: 0s
+  group_interval: 0s
+  repeat_interval: 1m
 
 receivers:
-- name: default
+- name: webhook-receiver
+  webhook_configs:
+  - url: "https://webhook.site/7bfbbb0a-5e2d-49e6-a488-8d141723b801"
+    send_resolved: true
