@@ -1,0 +1,11 @@
+groups:
+- name: flask-error
+  rules:
+  - alert: HighMicroblogErrorRate
+    expr: rate(microblog_errors_total{type="404"}[30s]) * 60 > 20
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: "High rate of 404 errors"
+      description: "More than 20 HTTP 404 errors per minute on Flask app"

@@ -39,13 +39,11 @@
     group: root
     mode: '0755'
 
-
 - name: Import prometheus config
   ansible.builtin.template:
     src: prometheus.yml.j2
     dest: /etc/prometheus/prometheus.yml
     mode: '0644'
-
 
 - name: Ensure Grafana cfg dir exists
   ansible.builtin.file:
@@ -59,11 +57,36 @@
     dest: /etc/grafana/grafana.ini
     mode: '0644'
 
+- name: Add rule folder for Prometheus
+  ansible.builtin.file:
+    path: /etc/prometheus/alerts
+    state: directory
+    mode: '0755'
+
+- name: Add rule for AlertManager
+  ansible.builtin.template:
+    src: alert.yml.j2
+    dest: /etc/prometheus/alerts/alert.yml
+    mode: '0644'
+
+- name: Add rule folder for Alertmanager
+  ansible.builtin.file:
+    path: /etc/alertmanager/
+    state: directory
+    mode: '0755'
+
+- name: Add config for Alertmanager
+  ansible.builtin.template:
+    src: alertmanager.yml.j2
+    dest: /etc/alertmanager/alertmanager.yml
+    mode: '0644'
+
 - name: Start node-exporter
   community.docker.docker_container:
     name: node-exporter
     image: "prom/node-exporter:v1.2.2"
     state: started
+    recreate: true
     restart_policy: unless-stopped
     volumes:
       - /proc:/host/proc:ro
@@ -81,13 +104,14 @@
 
 - name: Start Prometheus
   community.docker.docker_container:
-    name: "Prometheus"
+    name: "prometheus"
     image: "prom/prometheus:v2.31.1"
     state: started
+    recreate: true
     restart_policy: unless-stopped
-    recreate: yes
     volumes:
       - /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - /etc/prometheus/alerts:/etc/prometheus/alerts:ro
       - prometheus-data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -103,9 +127,10 @@
 
 - name: Start Grafana
   community.docker.docker_container:
-    name: "Grafana"
+    name: "grafana"
     image: "grafana/grafana:8.2.4"
     state: started
+    recreate: true
     restart_policy: unless-stopped
     volumes:
       - grafana-data:/var/lib/grafana
@@ -117,9 +142,17 @@
 
 - name: Start Alertmanager
   community.docker.docker_container:
-    name: "Alertmanager"
-    image: "prom/alertmanager"
+    name: alertmanager
+    image: prom/alertmanager
     state: started
+    recreate: true
     restart_policy: always
+    volumes:
+      - /etc/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
     published_ports:
       - "9093:9093"
+    networks:
+      - name: monitor
+
