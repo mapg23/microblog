@@ -215,7 +215,7 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	${pip} install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
-	cd ansible && ansible-galaxy install -r requirements.yml
+	cd ansible && ansible-galaxy install -r requirements.yml --force
 
 # target: bandit - Run Bandit security scan recursively on app/
 .PHONY: test-bandit
