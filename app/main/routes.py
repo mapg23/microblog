@@ -3,7 +3,7 @@ Contains routes for main purpose of app
 """
 from datetime import datetime
 import requests
-from flask import render_template, flash, redirect, url_for, request, current_app, abort
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user, login_required
 from app import db
 from app.main.forms import EditProfileForm, PostForm
@@ -146,7 +146,8 @@ def unfollow(username):
     flash(f'You are not following {username}.')
     return redirect(url_for('main.user', username=username))
 
-@bp.route('/teapot')
-def teapot():
-    """Simulate a 418 for testing purposes"""
-    abort(418, description="I'm a teapot")
+@bp.route('/error')
+def error():
+    """Simulate a error for testing purposes"""
+    print([1, 2][3]) # pylint: disable=potential-index-error
+    return "This will not be returned"

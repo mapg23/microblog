@@ -11,17 +11,17 @@ groups:
       summary: "Test alert"
       description: "This alert always fires"
 
-  - alert: Microblog404Burst
-    expr: increase(microblog_errors_total{type="404"}[30s]) > 0
+  - alert: MicroblogIndexErrorBurst
+    expr: increase(microblog_errors_total{type="IndexError"}[30s]) > 0
     for: 30s
     labels:
       severity: warning
 
   - alert: HighMicroblogErrorRate
-    expr: rate(microblog_errors_total{type="404"}[30s]) * 60 > 20
+    expr: rate(microblog_errors_total{type="IndexError"}[30s]) * 60 > 20
     for: 30s
     labels:
       severity: warning
     annotations:
-      summary: "High rate of 404 errors"
-      description: "More than 20 HTTP 404 errors per minute on Flask app"
+      summary: "High rate of IndexError errors on Flask app"
+      description: "More than 20 IndexError errors per minute on Flask app"

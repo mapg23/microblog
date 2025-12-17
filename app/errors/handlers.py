@@ -33,8 +33,10 @@ def internal_error(error):
     db.session.rollback()
     return render_template('errors/500.html'), 500
 
-@bp.app_errorhandler(418)
-def teapot_error(_error):
-    """Handle the I'm a teapot error"""
-    app_errors.labels(type="418").inc()
-    return "I'm a teapot ☕", 418
+@bp.app_errorhandler(IndexError)
+def index_error_handler(_error):
+    """
+    Error handler for IndexError
+    """
+    app_errors.labels(type="IndexError").inc()
+    return render_template("errors/500.html"), 500
