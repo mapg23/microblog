@@ -80,3 +80,15 @@ All notable changes to this project will be documented in this file.
 ## [13.0.5] - 2025-12-07
 
 - Added tests for bandit, trivy and dockler to run in actions
+
+## [14.0.0] - [14.0.11] - 2025-12-16
+- Added Grafana
+- Added Prometheus
+- Added Node-Exporter
+- Added AlertManager
+- Added webhook to AlertManager
+
+
+## [15.0.1] - 2025-12-17
+- Sync fork form upstream
+- New structure in kubernets folder
