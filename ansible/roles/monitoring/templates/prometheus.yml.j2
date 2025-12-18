@@ -28,3 +28,16 @@ scrape_configs:
       - targets: ["mapg23.me"]
         labels:
           instance: flask
+
+  - job_name: "flask"
+    scheme: https
+    metrics_path: "/metrics"
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+{% for host in groups['appservers_group'] %}
+    - targets:
+          - "{{ host }}:8000"
+      labels:
+        instance: "{{ host }}"
+{% endfor %}
