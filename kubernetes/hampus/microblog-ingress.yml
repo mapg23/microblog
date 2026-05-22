@@ -8,10 +8,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - kubernetes.mapg23.me
+        - hampe024.space
       secretName: demo-tls
   rules:
-    - host: kubernetes.mapg23.me
+    - host: hampe024.space
       http:
         paths:
           - path: /
